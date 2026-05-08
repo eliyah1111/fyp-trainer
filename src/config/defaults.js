@@ -13,9 +13,12 @@ export const DEFAULTS = Object.freeze({
   viewport: { width: 1280, height: 900 },
   session: {
     defaultDurationMs: 60_000,
-    maxDurationMs: 60_000,
+    minDurationMs: 30_000,
+    maxDurationMs: 300_000,
     maxSearches: 24,
     hardMaxSearches: 30,
+    maxSearchesPerMinute: 24,
+    hardMaxSearchesPerMinute: 30,
     videosPerSearchMin: 1,
     videosPerSearchMax: 1,
     maxLikes: 2,

@@ -25,8 +25,8 @@ The reusable runtime lives at the project root:
 npm install
 npm run install:browsers
 npm run profile -- --input="archive fashion, cinematic edits, house music, avoid celebrity drama"
-npm run plan
-npm run train -- --confirmed --duration=60
+npm run plan -- --duration=120
+npm run train -- --confirmed --duration=120
 npm run train -- --dry-run --duration=30
 ```
 
@@ -36,12 +36,13 @@ Use `npm run run` for the full interactive flow:
 2. Detect whether a persistent TikTok session is logged in.
 3. If not logged in, wait while the user logs in manually in the browser.
 4. Ask: "What kind of TikTok For You Page do you want?"
-5. Generate and show the training profile.
-6. Ask: "Is this correct or would you like changes?"
-7. Apply changes until confirmed.
-8. Run a capped training session.
+5. Ask: "How long are you willing to wait?"
+6. Generate and show the training profile with the selected time budget and safe search count.
+7. Ask: "Approve this search plan? [Y/N]"
+8. Apply changes until confirmed.
+9. Run a capped training session.
 
-Default pacing is optimized for a compact session that feels fast and ends in 60 seconds or less. The live planner targets up to 24 high-value searches by default and enforces a hard cap of 30 even when a larger number is requested. The profile step should generate a local bank of 100+ search candidates and ask for `Y/N` approval before live training. Planning is adaptive and cache-aware: repeated weak searches are temporarily deprioritized, while searches that expose useful video links, hashtags, creators, or matching profile terms become stronger future seeds. Use `--careful` only when the user explicitly asks for slower browsing. Do not implement hundreds of live searches, likes, follows, or views per minute; that is treated as robotic platform manipulation rather than user-assisted preference training.
+Default pacing is optimized to feel fast while spreading activity across the user's selected wait time. Interactive sessions ask for a 30-second to 5-minute time budget. The live planner targets up to 24 high-value searches per minute and enforces a hard cap of 30 per minute even when a larger number is requested. The profile step should generate a local bank of 100+ search candidates and ask for `Y/N` approval before live training. Planning is adaptive and cache-aware: repeated weak searches are temporarily deprioritized, while searches that expose useful video links, hashtags, creators, or matching profile terms become stronger future seeds. Use `--careful` only when the user explicitly asks for slower browsing. Do not implement hundreds of live searches, likes, follows, or views per minute; that is treated as robotic platform manipulation rather than user-assisted preference training.
 
 Default browser mode opens the user's Windows default Chromium browser app on TikTok and connects through local DevTools. Use a persistent FYP Trainer browser profile in `memory/<browser>-cdp-profile`; modern Chrome/Edge/Brave do not allow DevTools automation against the real default profile data directory. Use `--isolated` only when the user explicitly wants Playwright Chromium instead of the installed default browser app.
 
@@ -58,7 +59,7 @@ CDP mode controls the opened browser window and must be used only after the user
 
 ## Operating Rules
 
-- Keep sessions short. The runtime caps live sessions at 1 minute.
+- Keep sessions bounded. The runtime caps live sessions at 5 minutes.
 - Prefer search, watch time, and natural scrolling as primary signals.
 - Keep engagement low volume. Likes are capped, follows are disabled unless the caller passes `--allow-follow`, and Not Interested is capped.
 - Use `--dry-run` when validating automation or handing the workflow to another agent.
@@ -71,8 +72,8 @@ For multi-agent use, pass the profile as JSON or a saved memory profile id. The 
 
 ```bash
 node ./src/cli.js profile --input="<user taste request>" --json
-node ./src/cli.js plan --id="<profile-id>"
-node ./src/cli.js train --id="<profile-id>" --confirmed --duration=60
+node ./src/cli.js plan --id="<profile-id>" --duration=<seconds>
+node ./src/cli.js train --id="<profile-id>" --confirmed --duration=<seconds>
 node ./src/cli.js diagnose --isolated --query="<query>"
 node ./src/cli.js run
 ```

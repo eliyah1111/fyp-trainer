@@ -30,20 +30,34 @@ npm run bootstrap
 node ./src/cli.js profile --input="<user request>" --json
 ```
 
-4. Show the profile summary to the user and ask exactly:
+4. Ask the user:
+
+```text
+How long are you willing to wait?
+```
+
+Accept answers such as `30s`, `60`, `2 minutes`, or `5 דקות`. Keep the live session inside the safe 30-second to 5-minute window.
+
+5. Preview the plan with the selected duration:
+
+```bash
+node ./src/cli.js plan --duration=<seconds>
+```
+
+6. Show the profile summary, selected time budget, search count, and interaction caps. Then ask exactly:
 
 ```text
 Approve this search plan? [Y/N]
 ```
 
-5. If the user answers `N`, collect changes, regenerate the profile, and ask again.
-6. If the user answers `Y`, run:
+7. If the user answers `N`, collect changes, regenerate the profile, and ask again.
+8. If the user answers `Y`, run:
 
 ```bash
-node ./src/cli.js train --confirmed --duration=60
+node ./src/cli.js train --confirmed --duration=<seconds>
 ```
 
-7. Summarize `sessions/session-*.json`: searches, videos opened, watched, likes, Not Interested, and whether final refresh happened.
+9. Summarize `sessions/session-*.json`: searches, videos opened, watched, likes, Not Interested, and whether final refresh happened.
 
 For a non-live preview, run:
 
@@ -75,9 +89,9 @@ Classify videos using visible page text: caption, hashtags, title, creator, soun
 
 The runtime is intentionally bounded:
 
-- 60 seconds by default.
+- 60 seconds by default; interactive sessions ask the user for a 30-second to 5-minute time budget.
 - Search bank: 100+ local candidate searches.
-- Live TikTok execution: fast adaptive capped search burst, up to 24 high-value searches by default with a hard cap of 30, short watches, tiny capped preference actions.
+- Live TikTok execution: fast adaptive capped search burst, up to 24 high-value searches per minute with a hard cap of 30 per minute, short watches, tiny capped preference actions.
 - No mass following, commenting, messaging, posting, uploading, scraping, or hundreds of robotic live actions per minute.
 
 Use `references/agent-contract.md` and `references/safety-boundaries.md` for integration details.

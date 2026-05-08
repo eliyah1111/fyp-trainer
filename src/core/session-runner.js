@@ -1,5 +1,5 @@
 import { DEFAULTS } from "../config/defaults.js";
-import { buildSessionPlan } from "./session-planner.js";
+import { buildSessionPlan, normalizeSessionDuration } from "./session-planner.js";
 import { summarizeSearchSignals } from "./discovery-engine.js";
 import { launchTikTokBrowser, openTikTok } from "./browser.js";
 import { detectLoginState, summarizeLoginState } from "./tiktok-detector.js";
@@ -17,13 +17,6 @@ import {
   watchCurrentVideo
 } from "./tiktok-actions.js";
 import { chance, randomInt } from "../utils/random.js";
-
-function normalizeDuration(options) {
-  return Math.min(
-    Number(options.durationMs || options.durationSeconds * 1000 || DEFAULTS.session.defaultDurationMs),
-    DEFAULTS.session.maxDurationMs
-  );
-}
 
 function sessionTiming(options) {
   if (options.careful) return DEFAULTS.carefulTiming;
@@ -68,7 +61,7 @@ export async function runTrainingSession(profile, options = {}) {
     throw new Error("Live training requires explicit confirmation. Pass --confirmed or use interactive run.");
   }
 
-  const durationMs = normalizeDuration(options);
+  const durationMs = normalizeSessionDuration(options);
   const memory = options.memoryStore || new MemoryStore(options);
   const searchCache = await memory.getSearchCache();
   const plan = buildSessionPlan(profile, { ...options, durationMs, searchCache });

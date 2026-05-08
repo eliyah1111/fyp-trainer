@@ -156,22 +156,30 @@ What kind of TikTok For You Page do you want?
 node ./src/cli.js profile --input="<user request>" --json
 ~~~
 
-4. Preview the plan:
+4. Ask how long the user is willing to wait:
 
-~~~bash
-node ./src/cli.js plan --searches=5
+~~~text
+How long are you willing to wait?
 ~~~
 
-5. Show the profile and ask exactly:
+Normalize the answer to 30-300 seconds.
+
+5. Preview the plan with that time budget:
+
+~~~bash
+node ./src/cli.js plan --duration=<seconds>
+~~~
+
+6. Show the profile, selected time budget, search count, and ask exactly:
 
 ~~~text
 Approve this search plan? [Y/N]
 ~~~
 
-6. Only after \`Y\`, run:
+7. Only after \`Y\`, run:
 
 ~~~bash
-node ./src/cli.js train --confirmed --duration=60
+node ./src/cli.js train --confirmed --duration=<seconds>
 ~~~
 
 For the full interactive flow, run:
@@ -185,7 +193,7 @@ npm run run
 - Open TikTok visibly in the user's default supported Chromium browser app when supported.
 - Wait for manual login when needed.
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
-- Keep live sessions fast but capped: up to 24 live searches by default, hard cap 30, and no hundreds of robotic searches, views, likes, follows, or Not Interested actions per minute.
+- Keep live sessions fast but capped: up to 24 live searches per minute, hard cap 30 per minute, and no hundreds of robotic searches, views, likes, follows, or Not Interested actions per minute.
 - Use \`memory/search-cache.json\` as private local discovery memory.
 - Summarize the newest \`sessions/session-*.json\` after a run.
 EOF
@@ -240,21 +248,21 @@ What kind of TikTok For You Page do you want?
 
 If the user invokes /fyptrainer with a taste description in the same message, use that description directly.
 
-Run the workflow from the runtime root. Bootstrap if needed, generate a profile, show the plan, ask exactly \`Approve this search plan? [Y/N]\`, and only after \`Y\` run the confirmed training session.
+Run the workflow from the runtime root. Bootstrap if needed, generate a profile, ask how long the user is willing to wait, show the plan, ask exactly \`Approve this search plan? [Y/N]\`, and only after \`Y\` run the confirmed training session.
 
 ~~~bash
 cd "$INSTALL_DIR"
 npm run bootstrap
 node ./src/cli.js profile --input="<user request>" --json
-node ./src/cli.js plan --searches=5
-node ./src/cli.js train --confirmed --duration=60
+node ./src/cli.js plan --duration=<seconds>
+node ./src/cli.js train --confirmed --duration=<seconds>
 ~~~
 
 Rules:
 - Open TikTok visibly in the user's default supported Chromium browser app when supported.
 - Wait for manual login when needed.
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
-- Keep live sessions fast but capped: up to 24 live searches by default, hard cap 30.
+- Keep live sessions fast but capped: up to 24 live searches per minute, hard cap 30 per minute.
 - Summarize the newest \`sessions/session-*.json\` after a run.
 EOF
 
@@ -287,19 +295,20 @@ Then:
 1. Run bootstrap if dependencies are missing.
 2. Generate a profile with:
    node ./src/cli.js profile --input="<user request>" --json
-3. Preview the plan:
-   node ./src/cli.js plan --searches=5
-4. Show the plan and ask exactly:
+3. Ask how long the user is willing to wait, normalized to 30-300 seconds.
+4. Preview the plan:
+   node ./src/cli.js plan --duration=<seconds>
+5. Show the plan and ask exactly:
    Approve this search plan? [Y/N]
-5. Only after Y, run:
-   node ./src/cli.js train --confirmed --duration=60
-6. Summarize the newest sessions/session-*.json.
+6. Only after Y, run:
+   node ./src/cli.js train --confirmed --duration=<seconds>
+7. Summarize the newest sessions/session-*.json.
 
 Rules:
 - Open TikTok visibly in the user's default supported Chromium browser app when supported.
 - Wait for manual login when needed.
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
-- Keep live sessions fast but capped: up to 24 live searches by default, hard cap 30.
+- Keep live sessions fast but capped: up to 24 live searches per minute, hard cap 30 per minute.
 '''
 EOF
 

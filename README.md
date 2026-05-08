@@ -32,7 +32,7 @@ Claude Code and Gemini CLI use slash-command style:
 /fyptrainer
 ```
 
-The agent reads `SKILL.md` / `AGENTS.md`, asks what kind of FYP the user wants, runs bootstrap if needed, generates the search profile, asks `Approve this search plan? [Y/N]`, then opens TikTok visibly and runs the capped session.
+The agent reads `SKILL.md` / `AGENTS.md`, asks what kind of FYP the user wants, asks how long the user is willing to wait, runs bootstrap if needed, generates the search profile, asks `Approve this search plan? [Y/N]`, then opens TikTok visibly and runs the capped session.
 
 The installer clones or updates the runtime at `~/.fyp-trainer`, runs `npm run bootstrap`, and registers:
 
@@ -86,8 +86,8 @@ npm run run:cdp
 
 ```bash
 npm run profile -- --input="archive fashion, cinematic edits, ambient techno, avoid celebrity drama" --json
-npm run plan
-npm run train -- --confirmed --duration=60
+npm run plan -- --duration=120
+npm run train -- --confirmed --duration=120
 ```
 
 Use dry-run mode while testing:
@@ -96,7 +96,7 @@ Use dry-run mode while testing:
 npm run train -- --dry-run --duration=30
 ```
 
-Default sessions are optimized to feel fast and finish in 60 seconds or less: the live planner now targets up to 24 high-value searches per session, with a hard safety cap of 30 even if a larger number is requested. Use `--careful` only when you want the older slower pacing.
+Default sessions are optimized to feel fast, and the interactive flow asks how long the user is willing to wait. The safe window is 30 seconds to 5 minutes. The live planner targets up to 24 high-value searches per minute, with a hard safety cap of 30 per minute even if a larger number is requested. Use `--careful` only when you want the older slower pacing.
 The profile step generates a local search bank of 100+ candidate searches immediately, then asks for `Y/N` approval before any live training starts.
 
 Session planning is cache-aware:

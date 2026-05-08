@@ -15,7 +15,7 @@ test("caps session duration to the configured maximum", () => {
   const profile = analyzeFypRequest("streetwear sneakers and uk garage");
   const plan = buildSessionPlan(profile, { durationMs: 500_000 });
 
-  assert.equal(plan.durationMs, 60_000);
+  assert.equal(plan.durationMs, 300_000);
   assert.equal(plan.interactionCaps.follows, 0);
 });
 
@@ -25,4 +25,14 @@ test("caps live searches even when a larger number is requested", () => {
 
   assert.equal(plan.orchestration.hardLiveSearchLimit, 30);
   assert.ok(plan.searchQueue.length <= 30);
+});
+
+test("scales default live search budget with the user time budget", () => {
+  const profile = analyzeFypRequest("ai tools openai claude code codex gemini creative coding");
+  const plan = buildSessionPlan(profile, { durationSeconds: 300 });
+
+  assert.equal(plan.durationMs, 300_000);
+  assert.equal(plan.orchestration.defaultLiveSearchLimit, 120);
+  assert.equal(plan.orchestration.hardLiveSearchLimit, 150);
+  assert.ok(plan.searchQueue.length > 30);
 });

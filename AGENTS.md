@@ -42,13 +42,15 @@ The agent should ask what kind of TikTok For You Page the user wants, handle com
 
 1. Run `npm run bootstrap` if dependencies are not installed.
 2. Generate a profile with `node ./src/cli.js profile --input="<request>" --json`.
-3. Show the summary and ask exactly `Approve this search plan? [Y/N]`.
-4. On `N`, ask what to change and regenerate.
-5. On `Y`, run `node ./src/cli.js train --confirmed --duration=60`.
-6. Read the newest `sessions/session-*.json`.
-7. Report what happened: searches, videos opened, watches, Not Interested count, likes, and final refresh.
+3. Ask `How long are you willing to wait?` and normalize the answer to 30-300 seconds.
+4. Run `node ./src/cli.js plan --duration=<seconds>`.
+5. Show the summary, selected time budget, search count, and ask exactly `Approve this search plan? [Y/N]`.
+6. On `N`, ask what to change and regenerate.
+7. On `Y`, run `node ./src/cli.js train --confirmed --duration=<seconds>`.
+8. Read the newest `sessions/session-*.json`.
+9. Report what happened: searches, videos opened, watches, Not Interested count, likes, and final refresh.
 
-Default live sessions are fast but bounded: up to 24 high-value searches in a one-minute run, with a hard cap of 30 if an agent requests more.
+Default live sessions are fast but bounded: up to 24 high-value searches per minute, with a hard cap of 30 per minute if an agent requests more.
 
 ## Do Not
 
@@ -62,8 +64,8 @@ Default live sessions are fast but bounded: up to 24 high-value searches in a on
 ```bash
 npm run bootstrap
 node ./src/cli.js profile --input="<taste request>" --json
-node ./src/cli.js plan
-node ./src/cli.js train --confirmed --duration=60
+node ./src/cli.js plan --duration=120
+node ./src/cli.js train --confirmed --duration=120
 node ./src/cli.js diagnose --isolated --query="ai tools"
 ```
 

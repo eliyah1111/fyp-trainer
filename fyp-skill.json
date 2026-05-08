@@ -16,12 +16,13 @@
   },
   "commands": {
     "profile": "node ./src/cli.js profile --input=\"<user request>\" --json",
-    "plan": "node ./src/cli.js plan",
-    "train": "node ./src/cli.js train --confirmed --duration=60",
+    "plan": "node ./src/cli.js plan --duration=<seconds>",
+    "train": "node ./src/cli.js train --confirmed --duration=<seconds>",
     "interactive": "node ./src/cli.js run",
     "diagnose": "node ./src/cli.js diagnose --isolated --query=\"<query>\""
   },
   "approval": {
+    "timeBudgetPrompt": "How long are you willing to wait?",
     "prompt": "Approve this search plan? [Y/N]",
     "requiredBeforeTrain": true
   },
@@ -32,9 +33,10 @@
   },
   "limits": {
     "defaultDurationSeconds": 60,
-    "maxDurationSeconds": 60,
-    "defaultLiveSearches": 24,
-    "hardLiveSearchCap": 30,
+    "minDurationSeconds": 30,
+    "maxDurationSeconds": 300,
+    "defaultLiveSearchesPerMinute": 24,
+    "hardLiveSearchCapPerMinute": 30,
     "massActionsPerMinute": false
   }
 }
