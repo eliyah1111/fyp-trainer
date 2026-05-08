@@ -1,0 +1,17 @@
+---
+description: Use FYP Trainer to generate and run transparent TikTok FYP training sessions.
+globs:
+  - "fyp-trainer/**"
+alwaysApply: false
+---
+
+Read `skills/fyp-trainer/SKILL.md` first.
+
+Workflow:
+
+1. Run `npm run diagnose -- --query="<target aesthetic>"`.
+2. Generate a profile with `npm run profile -- --input="<user request>" --json`.
+3. Show the profile summary to the user.
+4. Run `npm run plan -- --searches=5` to preview ranked cache-aware discovery.
+5. Run `npm run train -- --confirmed --duration=60` only after confirmation.
+6. Inspect the newest `sessions/session-*.json` file and summarize metrics.

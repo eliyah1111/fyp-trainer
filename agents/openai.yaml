@@ -1,0 +1,7 @@
+interface:
+  display_name: "FYP Trainer"
+  short_description: "Agent-run TikTok FYP training workflow"
+  default_prompt: "Use $fyp-trainer to build a TikTok FYP training profile, ask for Y/N approval, and run one visible capped session."
+
+policy:
+  allow_implicit_invocation: true

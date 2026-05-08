@@ -1,0 +1,17 @@
+node_modules/
+
+# Local browser state and TikTok login/session data.
+memory/browser-profile/
+memory/tmp-diagnostic-profile/
+memory/*-cdp-profile/
+memory/profiles.json
+memory/settings.json
+memory/search-cache.json
+
+# Generated run artifacts.
+sessions/*
+!sessions/.gitkeep
+
+# Local environment files.
+.env
+.env.*

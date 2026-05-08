@@ -1,0 +1,36 @@
+{
+  "name": "fyp-trainer",
+  "version": "0.1.0",
+  "entrypoint": "SKILL.md",
+  "runtime": "node-playwright",
+  "bootstrap": "npm run bootstrap",
+  "install": {
+    "repo": "https://github.com/eliyah1111/fyp-trainer.git",
+    "windows": "powershell -ExecutionPolicy Bypass -Command \"iwr https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts/install-fyp-trainer.ps1 -OutFile $env:TEMP\\install-fyp-trainer.ps1; & $env:TEMP\\install-fyp-trainer.ps1\"",
+    "unix": "curl -fsSL https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts/install-fyp-trainer.sh | bash",
+    "defaultInstallDir": "~/.fyp-trainer",
+    "codexSkillDir": "~/.codex/skills/fyp-trainer"
+  },
+  "commands": {
+    "profile": "node ./src/cli.js profile --input=\"<user request>\" --json",
+    "plan": "node ./src/cli.js plan",
+    "train": "node ./src/cli.js train --confirmed --duration=60",
+    "interactive": "node ./src/cli.js run",
+    "diagnose": "node ./src/cli.js diagnose --isolated --query=\"<query>\""
+  },
+  "approval": {
+    "prompt": "Approve this search plan? [Y/N]",
+    "requiredBeforeTrain": true
+  },
+  "browser": {
+    "visible": true,
+    "default": "Windows default Chromium browser app through local CDP",
+    "profile": "memory/<browser>-cdp-profile"
+  },
+  "limits": {
+    "defaultDurationSeconds": 60,
+    "maxDurationSeconds": 60,
+    "massActionsPerMinute": false
+  }
+}
+
