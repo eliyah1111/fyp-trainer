@@ -23,4 +23,4 @@ node ./src/cli.js train --confirmed --duration=60
 
 ## Integration
 
-Codex can import `src/index.js` for programmatic workflows or call the CLI. Use `plan` to preview ranked cache-aware discovery, `--dry-run` during code changes, and `--confirmed` only after the user approves the profile summary.
+Codex can import `src/index.js` for programmatic workflows or call the CLI. The GitHub installer registers `$fyptrainer` at `~/.codex/skills/fyptrainer/SKILL.md`. Use `plan` to preview ranked cache-aware discovery, `--dry-run` during code changes, and `--confirmed` only after the user approves the profile summary.

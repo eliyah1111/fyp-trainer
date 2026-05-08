@@ -26,3 +26,5 @@ By default, browser-launching commands open the user's Windows default supported
 ## Integration
 
 Expose three tools to the agent: `fyp_profile`, `fyp_plan`, and `fyp_train`. Require a user confirmation gate between `fyp_plan` and `fyp_train`.
+
+For command-style agents, use `$fyptrainer` in Codex/OpenAI-style skill environments and `/fyptrainer` in Claude Code or Gemini CLI.

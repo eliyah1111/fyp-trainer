@@ -22,4 +22,4 @@ npm run train -- --confirmed --duration=60
 
 ## Integration
 
-Cursor Agents should use the CLI as the source of truth, preview cache-aware plans before live training, and inspect session JSON after each run. Live sessions require explicit user confirmation.
+Cursor Agents should use the CLI as the source of truth, preview cache-aware plans before live training, and inspect session JSON after each run. Live sessions require explicit user confirmation. If the environment supports command-style prompts, use `$fyptrainer`; if it follows slash-command conventions, use `/fyptrainer`.

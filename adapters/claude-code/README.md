@@ -5,7 +5,7 @@
 After the user installs or clones the GitHub repo, tell Claude Code:
 
 ```text
-$fyptrainer
+/fyptrainer
 ```
 
 ## Commands
@@ -19,7 +19,7 @@ npm run plan -- --searches=5
 npm run train -- --confirmed --duration=60
 ```
 
-`npm run run` now opens the user's Windows default supported browser app with FYP Trainer's persistent browser profile.
+The GitHub installer registers this as a personal Claude Code skill at `~/.claude/skills/fyptrainer/SKILL.md`. Invoke it as `/fyptrainer`. `npm run run` opens the user's Windows default supported browser app with FYP Trainer's persistent browser profile.
 
 ## Integration
 

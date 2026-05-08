@@ -16,7 +16,11 @@ macOS / Linux:
 curl -fsSL https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts/install-fyp-trainer.sh | bash
 ```
 
-The installer clones or updates the runtime at `~/.fyp-trainer`, runs bootstrap, and registers a Codex skill at `~/.codex/skills/fyptrainer`.
+The installer clones or updates the runtime at `~/.fyp-trainer`, runs bootstrap, and registers:
+
+- Codex/OpenAI-style skill: `~/.codex/skills/fyptrainer`
+- Claude Code skill: `~/.claude/skills/fyptrainer`
+- Gemini CLI command: `~/.gemini/commands/fyptrainer.toml`
 
 ## User Experience
 
@@ -24,6 +28,12 @@ The user should say something like:
 
 ```text
 $fyptrainer
+```
+
+Claude Code and Gemini CLI should use:
+
+```text
+/fyptrainer
 ```
 
 The agent should ask what kind of TikTok For You Page the user wants, handle commands internally, and keep the user in the approval loop.

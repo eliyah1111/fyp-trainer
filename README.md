@@ -26,9 +26,19 @@ Then they tell their AI agent:
 $fyptrainer
 ```
 
+Claude Code and Gemini CLI use slash-command style:
+
+```text
+/fyptrainer
+```
+
 The agent reads `SKILL.md` / `AGENTS.md`, asks what kind of FYP the user wants, runs bootstrap if needed, generates the search profile, asks `Approve this search plan? [Y/N]`, then opens TikTok visibly and runs the capped session.
 
-The installer clones or updates the runtime at `~/.fyp-trainer`, runs `npm run bootstrap`, and registers a small Codex skill at `~/.codex/skills/fyptrainer` that points back to the installed runtime.
+The installer clones or updates the runtime at `~/.fyp-trainer`, runs `npm run bootstrap`, and registers:
+
+- Codex/OpenAI-style skill: `~/.codex/skills/fyptrainer`
+- Claude Code skill: `~/.claude/skills/fyptrainer`
+- Gemini CLI command: `~/.gemini/commands/fyptrainer.toml`
 
 To install from a fork or another repo:
 
@@ -102,7 +112,7 @@ The plan includes ranked search items, discovery scores, orchestration mode, and
 ```text
 fyp-trainer/
   src/                 Node.js runtime and Playwright workflows
-  skills/fyp-trainer/  Agent skill instructions
+  skills/fyp-trainer/  Agent skill instructions source
   adapters/            Claude Code, Codex, Cursor, OpenAI Agents notes
   memory/              Local profile, search cache, and browser state
   sessions/            Session logs, diagnostics, screenshots

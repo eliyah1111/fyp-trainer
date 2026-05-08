@@ -4,10 +4,14 @@ set -euo pipefail
 REPO_URL="${REPO_URL:-https://github.com/eliyah1111/fyp-trainer.git}"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.fyp-trainer}"
 CODEX_SKILLS_DIR="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
+CLAUDE_SKILLS_DIR="${CLAUDE_SKILLS_DIR:-$HOME/.claude/skills}"
+GEMINI_COMMANDS_DIR="${GEMINI_COMMANDS_DIR:-$HOME/.gemini/commands}"
 CODEX_SKILL_NAME="${CODEX_SKILL_NAME:-fyptrainer}"
 BRANCH="${BRANCH:-}"
 SKIP_BOOTSTRAP="${SKIP_BOOTSTRAP:-0}"
 SKIP_CODEX_SKILL="${SKIP_CODEX_SKILL:-0}"
+SKIP_CLAUDE_SKILL="${SKIP_CLAUDE_SKILL:-0}"
+SKIP_GEMINI_COMMAND="${SKIP_GEMINI_COMMAND:-0}"
 
 require_command() {
   local name="$1"
@@ -199,6 +203,109 @@ EOF
   echo "Registered Codex skill at $skill_dir"
 }
 
+register_claude_skill() {
+  if [[ "$SKIP_CLAUDE_SKILL" == "1" ]]; then
+    return
+  fi
+
+  local skill_dir="$CLAUDE_SKILLS_DIR/$CODEX_SKILL_NAME"
+  mkdir -p "$skill_dir"
+
+  cat > "$skill_dir/SKILL.md" <<EOF
+---
+name: $CODEX_SKILL_NAME
+description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For You Page personalization. Use when the user invokes /fyptrainer or asks to train, personalize, curate, or reshape their TikTok FYP with a visible browser, Node.js, Playwright, adaptive search planning, Y/N approval, and safe capped browsing sessions.
+argument-hint: "[taste profile]"
+---
+
+# FYP Trainer
+
+Invoke this Claude Code skill with:
+
+~~~text
+/fyptrainer
+~~~
+
+Runtime installed at:
+
+~~~text
+$INSTALL_DIR
+~~~
+
+If the user invokes only /fyptrainer with no taste description, ask:
+
+~~~text
+What kind of TikTok For You Page do you want?
+~~~
+
+If the user invokes /fyptrainer with a taste description in the same message, use that description directly.
+
+Run the workflow from the runtime root. Bootstrap if needed, generate a profile, show the plan, ask exactly \`Approve this search plan? [Y/N]\`, and only after \`Y\` run the confirmed training session.
+
+~~~bash
+cd "$INSTALL_DIR"
+npm run bootstrap
+node ./src/cli.js profile --input="<user request>" --json
+node ./src/cli.js plan --searches=5
+node ./src/cli.js train --confirmed --duration=60
+~~~
+
+Rules:
+- Open TikTok visibly in the user's default supported Chromium browser app when supported.
+- Wait for manual login when needed.
+- Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
+- Keep live sessions capped and realistic.
+- Summarize the newest \`sessions/session-*.json\` after a run.
+EOF
+
+  echo "Registered Claude Code skill at $skill_dir"
+}
+
+register_gemini_command() {
+  if [[ "$SKIP_GEMINI_COMMAND" == "1" ]]; then
+    return
+  fi
+
+  mkdir -p "$GEMINI_COMMANDS_DIR"
+  local command_path="$GEMINI_COMMANDS_DIR/fyptrainer.toml"
+
+  cat > "$command_path" <<EOF
+description = "FYP Trainer: user-confirmed TikTok For You Page personalization workflow."
+prompt = '''
+# FYP Trainer
+
+You are running the GitHub-installed FYP Trainer runtime.
+
+Runtime path:
+$INSTALL_DIR
+
+If the user's /fyptrainer command includes a taste description, use it directly. If not, ask:
+
+What kind of TikTok For You Page do you want?
+
+Then:
+1. Run bootstrap if dependencies are missing.
+2. Generate a profile with:
+   node ./src/cli.js profile --input="<user request>" --json
+3. Preview the plan:
+   node ./src/cli.js plan --searches=5
+4. Show the plan and ask exactly:
+   Approve this search plan? [Y/N]
+5. Only after Y, run:
+   node ./src/cli.js train --confirmed --duration=60
+6. Summarize the newest sessions/session-*.json.
+
+Rules:
+- Open TikTok visibly in the user's default supported Chromium browser app when supported.
+- Wait for manual login when needed.
+- Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
+- Keep live sessions capped and realistic.
+'''
+EOF
+
+  echo "Registered Gemini CLI command at $command_path"
+}
+
 require_command git "Install Git from https://git-scm.com/downloads"
 require_command node "Install Node.js 20+ from https://nodejs.org/"
 require_command npm "Install Node.js 20+ from https://nodejs.org/"
@@ -211,6 +318,8 @@ if [[ "$SKIP_BOOTSTRAP" != "1" ]]; then
 fi
 
 register_codex_skill
+register_claude_skill
+register_gemini_command
 
 echo
 echo "FYP Trainer installed."
@@ -218,8 +327,15 @@ echo "Runtime: $INSTALL_DIR"
 if [[ "$SKIP_CODEX_SKILL" != "1" ]]; then
   echo "Codex skill: $CODEX_SKILLS_DIR/$CODEX_SKILL_NAME"
 fi
+if [[ "$SKIP_CLAUDE_SKILL" != "1" ]]; then
+  echo "Claude Code skill: $CLAUDE_SKILLS_DIR/$CODEX_SKILL_NAME"
+fi
+if [[ "$SKIP_GEMINI_COMMAND" != "1" ]]; then
+  echo "Gemini CLI command: $GEMINI_COMMANDS_DIR/fyptrainer.toml"
+fi
 echo
-echo "Now tell your AI agent:"
+echo "Now invoke it with:"
 echo '$fyptrainer'
-echo "The agent will ask what kind of TikTok For You Page you want."
+echo '/fyptrainer'
+echo 'Codex-style agents use $fyptrainer. Claude Code and Gemini CLI use /fyptrainer.'
 

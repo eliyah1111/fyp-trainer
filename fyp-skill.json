@@ -10,7 +10,9 @@
     "windows": "powershell -ExecutionPolicy Bypass -Command \"iwr https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts/install-fyp-trainer.ps1 -OutFile $env:TEMP\\install-fyp-trainer.ps1; & $env:TEMP\\install-fyp-trainer.ps1\"",
     "unix": "curl -fsSL https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts/install-fyp-trainer.sh | bash",
     "defaultInstallDir": "~/.fyp-trainer",
-    "codexSkillDir": "~/.codex/skills/fyptrainer"
+    "codexSkillDir": "~/.codex/skills/fyptrainer",
+    "claudeSkillDir": "~/.claude/skills/fyptrainer",
+    "geminiCommand": "~/.gemini/commands/fyptrainer.toml"
   },
   "commands": {
     "profile": "node ./src/cli.js profile --input=\"<user request>\" --json",
