@@ -6,8 +6,11 @@ import { PROJECT_ROOT } from "../src/config/defaults.js";
 
 function run(command, args, options = {}) {
   return new Promise((resolve, reject) => {
-    const executable = process.platform === "win32" && command === "npm" ? "npm.cmd" : command;
-    const child = spawn(executable, args, {
+    const isWindows = process.platform === "win32";
+    const executable = command === "node" ? process.execPath : command;
+    const spawnFile = isWindows && command === "npm" ? "cmd.exe" : executable;
+    const spawnArgs = isWindows && command === "npm" ? ["/d", "/s", "/c", command, ...args] : args;
+    const child = spawn(spawnFile, spawnArgs, {
       cwd: PROJECT_ROOT,
       shell: false,
       stdio: "inherit",
