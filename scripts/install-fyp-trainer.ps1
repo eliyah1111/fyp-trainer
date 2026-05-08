@@ -217,5 +217,6 @@ if (-not $SkipCodexSkill) {
 }
 Write-Output ""
 Write-Output "Now tell your AI agent:"
-Write-Output "Use FYP Trainer. I want my TikTok FYP to become AI tech news, Claude Code, Codex, Gemini, new AI tools, and creative AI builds."
+Write-Output "Use FYP Trainer."
+Write-Output "The agent will ask what kind of TikTok For You Page you want."
 

@@ -23,10 +23,10 @@ The installer clones or updates the runtime at `~/.fyp-trainer`, runs bootstrap,
 The user should say something like:
 
 ```text
-Use FYP Trainer. I want my TikTok FYP to become AI tech news, Claude Code, Codex, Gemini, new AI tools, and creative AI builds.
+Use FYP Trainer.
 ```
 
-The agent should handle commands internally and keep the user in the approval loop.
+The agent should ask what kind of TikTok For You Page the user wants, handle commands internally, and keep the user in the approval loop.
 
 ## Required Flow
 

@@ -175,5 +175,6 @@ if [[ "$SKIP_CODEX_SKILL" != "1" ]]; then
 fi
 echo
 echo "Now tell your AI agent:"
-echo "Use FYP Trainer. I want my TikTok FYP to become AI tech news, Claude Code, Codex, Gemini, new AI tools, and creative AI builds."
+echo "Use FYP Trainer."
+echo "The agent will ask what kind of TikTok For You Page you want."
 
