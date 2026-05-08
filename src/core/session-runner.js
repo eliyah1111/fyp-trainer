@@ -6,6 +6,7 @@ import { detectLoginState, summarizeLoginState } from "./tiktok-detector.js";
 import { Humanizer } from "./humanizer.js";
 import { MemoryStore } from "./memory-store.js";
 import {
+  auditForYouFeed,
   goToNextVideo,
   openFeedFallback,
   openRandomVideoFromPage,
@@ -249,13 +250,33 @@ export async function runTrainingSession(profile, options = {}) {
     });
     log("Refreshed TikTok feed at session end");
 
+    const feedAudit = await auditForYouFeed(browser.page, profile, {
+      humanizer,
+      samples: options.feedAuditSamples ?? DEFAULTS.session.feedAuditSamples
+    });
+    await memory.appendEvent(sessionRef, {
+      type: "feed-audit",
+      result: feedAudit
+    });
+    const auditPercent = Math.round(feedAudit.relevanceRate * 100);
+    log(
+      `Post-refresh feed audit: ${feedAudit.related}/${feedAudit.samples} related (${auditPercent}%) | ${feedAudit.status}`
+    );
+
     const finished = await memory.finishSession(sessionRef, "completed", {
-      summary: "Training session completed within capped duration."
+      summary:
+        feedAudit.status === "validated"
+          ? "Training session completed and post-refresh feed audit found matching signals."
+          : "Training session completed, but the post-refresh feed is still warming up.",
+      outcome: {
+        feedAudit
+      }
     });
     return {
       status: "completed",
       sessionFile: sessionRef.filePath,
-      metrics: finished.metrics
+      metrics: finished.metrics,
+      outcome: finished.outcome
     };
   } catch (error) {
     if (sessionRef) {

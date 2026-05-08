@@ -195,7 +195,8 @@ npm run run
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
 - Keep live sessions fast but capped: up to 24 live searches per minute, hard cap 30 per minute, and no hundreds of robotic searches, views, likes, follows, or Not Interested actions per minute.
 - Use \`memory/search-cache.json\` as private local discovery memory.
-- Summarize the newest \`sessions/session-*.json\` after a run.
+- Summarize the newest \`sessions/session-*.json\` after a run, including \`outcome.feedAudit.status\`.
+- Do not present \`warming\` or \`no-data\` as a fully adapted FYP.
 EOF
 
   cat > "$agent_dir/openai.yaml" <<EOF
@@ -263,7 +264,8 @@ Rules:
 - Wait for manual login when needed.
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
 - Keep live sessions fast but capped: up to 24 live searches per minute, hard cap 30 per minute.
-- Summarize the newest \`sessions/session-*.json\` after a run.
+- Summarize the newest \`sessions/session-*.json\` after a run, including \`outcome.feedAudit.status\`.
+- Do not present \`warming\` or \`no-data\` as a fully adapted FYP.
 EOF
 
   echo "Registered Claude Code skill at $skill_dir"
@@ -302,13 +304,14 @@ Then:
    Approve this search plan? [Y/N]
 6. Only after Y, run:
    node ./src/cli.js train --confirmed --duration=<seconds>
-7. Summarize the newest sessions/session-*.json.
+7. Summarize the newest sessions/session-*.json, including outcome.feedAudit.status.
 
 Rules:
 - Open TikTok visibly in the user's default supported Chromium browser app when supported.
 - Wait for manual login when needed.
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
 - Keep live sessions fast but capped: up to 24 live searches per minute, hard cap 30 per minute.
+- Do not present warming or no-data as a fully adapted FYP.
 '''
 EOF
 

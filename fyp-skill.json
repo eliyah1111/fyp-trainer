@@ -26,6 +26,11 @@
     "prompt": "Approve this search plan? [Y/N]",
     "requiredBeforeTrain": true
   },
+  "outcome": {
+    "feedAuditPath": "outcome.feedAudit.status",
+    "statuses": ["validated", "warming", "no-data"],
+    "validatedMeans": "The refreshed For You sample contained enough matching signals."
+  },
   "browser": {
     "visible": true,
     "default": "Windows default Chromium browser app through local CDP",

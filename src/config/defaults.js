@@ -24,7 +24,9 @@ export const DEFAULTS = Object.freeze({
     maxLikes: 2,
     maxFollows: 0,
     maxNotInterested: 4,
-    minimumInteractionGapMs: 8_000
+    minimumInteractionGapMs: 8_000,
+    feedAuditSamples: 5,
+    feedAuditTargetRate: 0.4
   },
   timing: {
     pagePauseMinMs: 90,

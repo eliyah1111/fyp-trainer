@@ -48,7 +48,13 @@ The agent should ask what kind of TikTok For You Page the user wants, handle com
 6. On `N`, ask what to change and regenerate.
 7. On `Y`, run `node ./src/cli.js train --confirmed --duration=<seconds>`.
 8. Read the newest `sessions/session-*.json`.
-9. Report what happened: searches, videos opened, watches, Not Interested count, likes, and final refresh.
+9. Report what happened: searches, videos opened, watches, Not Interested count, likes, final refresh URL, and `outcome.feedAudit.status`.
+
+Do not call the run successful only because automation completed. Treat `outcome.feedAudit.status` as the outcome:
+
+- `validated`: refreshed For You sample contains enough matching signals.
+- `warming`: training signals were sent, but the refreshed For You sample is not aligned enough yet.
+- `no-data`: the audit could not inspect enough feed context.
 
 Default live sessions are fast but bounded: up to 24 high-value searches per minute, with a hard cap of 30 per minute if an agent requests more.
 

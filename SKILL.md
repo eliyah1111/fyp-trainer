@@ -57,7 +57,13 @@ Approve this search plan? [Y/N]
 node ./src/cli.js train --confirmed --duration=<seconds>
 ```
 
-9. Summarize `sessions/session-*.json`: searches, videos opened, watched, likes, Not Interested, and whether final refresh happened.
+9. Summarize `sessions/session-*.json`: searches, videos opened, watched, likes, Not Interested, final refresh URL, and the post-refresh feed audit outcome.
+
+The run is not considered proven just because actions completed. Check `outcome.feedAudit.status`:
+
+- `validated`: the refreshed For You sample had enough matching signals.
+- `warming`: the session ran, but the refreshed For You sample is not strongly aligned yet.
+- `no-data`: the audit could not read enough feed context.
 
 For a non-live preview, run:
 
@@ -92,6 +98,7 @@ The runtime is intentionally bounded:
 - 60 seconds by default; interactive sessions ask the user for a 30-second to 5-minute time budget.
 - Search bank: 100+ local candidate searches.
 - Live TikTok execution: fast adaptive capped search burst, up to 24 high-value searches per minute with a hard cap of 30 per minute, short watches, tiny capped preference actions.
+- Final outcome check: force-open `/foryou`, refresh it, sample the refreshed feed, and report whether the FYP is validated or still warming up.
 - No mass following, commenting, messaging, posting, uploading, scraping, or hundreds of robotic live actions per minute.
 
 Use `references/agent-contract.md` and `references/safety-boundaries.md` for integration details.

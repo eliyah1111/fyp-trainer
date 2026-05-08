@@ -21,7 +21,7 @@
     "diagnose:cdp": "node ./src/cli.js diagnose --cdp=http://127.0.0.1:9222",
     "bootstrap": "node ./scripts/bootstrap.js",
     "check": "node ./scripts/check-syntax.js",
-    "test": "node --test ./test/memory-store.test.js ./test/profile-analyzer.test.js ./test/session-planner.test.js ./test/discovery-engine.test.js",
+    "test": "node --test ./test/memory-store.test.js ./test/profile-analyzer.test.js ./test/session-planner.test.js ./test/discovery-engine.test.js ./test/tiktok-actions.test.js",
     "validate": "npm run check && npm test",
     "install:browsers": "playwright install chromium"
   },

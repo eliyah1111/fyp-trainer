@@ -44,6 +44,8 @@ Use `npm run run` for the full interactive flow:
 
 Default pacing is optimized to feel fast while spreading activity across the user's selected wait time. Interactive sessions ask for a 30-second to 5-minute time budget. The live planner targets up to 24 high-value searches per minute and enforces a hard cap of 30 per minute even when a larger number is requested. The profile step should generate a local bank of 100+ search candidates and ask for `Y/N` approval before live training. Planning is adaptive and cache-aware: repeated weak searches are temporarily deprioritized, while searches that expose useful video links, hashtags, creators, or matching profile terms become stronger future seeds. Use `--careful` only when the user explicitly asks for slower browsing. Do not implement hundreds of live searches, likes, follows, or views per minute; that is treated as robotic platform manipulation rather than user-assisted preference training.
 
+At the end of every live run, inspect `outcome.feedAudit.status` from the session result or newest `sessions/session-*.json`. The runtime should force-open `/foryou`, refresh it, sample the refreshed feed, and report `validated`, `warming`, or `no-data`. Do not present a `warming` run as a fully adapted FYP.
+
 Default browser mode opens the user's Windows default Chromium browser app on TikTok and connects through local DevTools. Use a persistent FYP Trainer browser profile in `memory/<browser>-cdp-profile`; modern Chrome/Edge/Brave do not allow DevTools automation against the real default profile data directory. Use `--isolated` only when the user explicitly wants Playwright Chromium instead of the installed default browser app.
 
 ## Browser Modes
@@ -61,6 +63,7 @@ CDP mode controls the opened browser window and must be used only after the user
 
 - Keep sessions bounded. The runtime caps live sessions at 5 minutes.
 - Prefer search, watch time, and natural scrolling as primary signals.
+- Verify the final visible For You feed with the post-refresh audit before summarizing the result.
 - Keep engagement low volume. Likes are capped, follows are disabled unless the caller passes `--allow-follow`, and Not Interested is capped.
 - Use `--dry-run` when validating automation or handing the workflow to another agent.
 - Store all generated memory in `memory/`, including private `search-cache.json`, and run logs in `sessions/`.

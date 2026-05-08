@@ -1,7 +1,8 @@
 import { Humanizer } from "./humanizer.js";
+import { DEFAULTS } from "../config/defaults.js";
 import { chance, randomInt, sample } from "../utils/random.js";
 
-function scoreTextAgainstProfile(text, profile) {
+export function scoreTextAgainstProfile(text, profile) {
   const lower = String(text || "").toLowerCase();
   const positiveTerms = [
     ...profile.hashtags,
@@ -13,6 +14,26 @@ function scoreTextAgainstProfile(text, profile) {
   const positive = positiveTerms.filter((term) => term && lower.includes(term)).length;
   const negative = negativeTerms.filter((term) => term && lower.includes(term)).length;
   return Math.max(-1, Math.min(1, positive * 0.22 - negative * 0.35));
+}
+
+export function summarizeFeedAudit(samples = [], options = {}) {
+  const targetRate = options.targetRate ?? DEFAULTS.session.feedAuditTargetRate;
+  const scored = samples.filter((item) => Number.isFinite(item.score));
+  const related = scored.filter((item) => item.score > 0.08);
+  const unrelated = scored.filter((item) => item.score <= 0.02);
+  const averageScore =
+    scored.length === 0 ? 0 : scored.reduce((total, item) => total + item.score, 0) / scored.length;
+  const relevanceRate = scored.length === 0 ? 0 : related.length / scored.length;
+
+  return {
+    samples: scored.length,
+    related: related.length,
+    unrelated: unrelated.length,
+    averageScore: Number(averageScore.toFixed(3)),
+    relevanceRate: Number(relevanceRate.toFixed(3)),
+    targetRate,
+    status: scored.length === 0 ? "no-data" : relevanceRate >= targetRate ? "validated" : "warming"
+  };
 }
 
 async function clickFirstVisible(page, selectors) {
@@ -252,13 +273,49 @@ export async function tryNotInterestedCurrentVideo(page, options = {}) {
 
 export async function refreshTikTokFeed(page, options = {}) {
   const humanizer = options.humanizer || new Humanizer();
-  await page.reload({ waitUntil: "commit", timeout: 10_000 }).catch(async () => {
-    await page.goto("https://www.tiktok.com/foryou", { waitUntil: "commit", timeout: 10_000 });
+  await page.goto("https://www.tiktok.com/foryou", { waitUntil: "commit", timeout: 10_000 }).catch(async () => {
+    await page.goto("https://www.tiktok.com/", { waitUntil: "commit", timeout: 10_000 });
   });
+  await page.reload({ waitUntil: "commit", timeout: 10_000 }).catch(() => {});
   await page.waitForLoadState("domcontentloaded", { timeout: 5_000 }).catch(() => {});
+  await page
+    .waitForFunction(() => document.querySelector("video") || (document.body?.innerText || "").length > 20, {
+      timeout: 5_000
+    })
+    .catch(() => {});
   await humanizer.pause(250, 700);
   return {
     ok: true,
     url: page.url()
+  };
+}
+
+export async function auditForYouFeed(page, profile, options = {}) {
+  const humanizer = options.humanizer || new Humanizer();
+  const sampleCount = Math.max(1, Math.min(Number(options.samples || DEFAULTS.session.feedAuditSamples), 12));
+  const samples = [];
+
+  if (!page.url().includes("/foryou")) {
+    await openFeedFallback(page, { humanizer });
+  }
+
+  for (let index = 0; index < sampleCount; index += 1) {
+    const context = await collectVideoContext(page, profile);
+    samples.push({
+      index: index + 1,
+      url: context.url,
+      title: context.title,
+      score: context.score,
+      textPreview: String(context.text || "").slice(0, 280)
+    });
+
+    if (index < sampleCount - 1) {
+      await goToNextVideo(page, { humanizer });
+    }
+  }
+
+  return {
+    ...summarizeFeedAudit(samples, options),
+    samplesDetail: samples
   };
 }

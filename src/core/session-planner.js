@@ -79,6 +79,7 @@ export function buildSessionPlan(profile, options = {}) {
       "adaptive-video-sampling",
       "recommendation-memory-update",
       "feed-refresh",
+      "post-refresh-feed-audit",
       "session-summary"
     ]
   };

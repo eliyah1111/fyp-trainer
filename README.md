@@ -107,6 +107,8 @@ npm run plan -- --searches=5
 
 The plan includes ranked search items, discovery scores, orchestration mode, and interaction caps. Repeated weak searches are deprioritized for a few hours; searches that expose useful videos, hashtags, or creators become stronger future seeds.
 
+At the end of a live run, FYP Trainer now force-opens `/foryou`, refreshes the feed, samples the refreshed For You page, and writes `outcome.feedAudit.status` to the session log. A run can finish as `validated`, `warming`, or `no-data`; this prevents the agent from claiming a finished result when the visible For You feed is not yet aligned.
+
 ## Structure
 
 ```text
