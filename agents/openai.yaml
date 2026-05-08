@@ -1,7 +1,7 @@
 interface:
   display_name: "FYP Trainer"
   short_description: "Agent-run TikTok FYP training workflow"
-  default_prompt: "$fyp-trainer"
+  default_prompt: "$fyptrainer"
 
 policy:
   allow_implicit_invocation: true

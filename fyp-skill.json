@@ -1,7 +1,7 @@
 {
-  "name": "fyp-trainer",
+  "name": "fyptrainer",
   "version": "0.1.0",
-  "invocation": "$fyp-trainer",
+  "invocation": "$fyptrainer",
   "entrypoint": "SKILL.md",
   "runtime": "node-playwright",
   "bootstrap": "npm run bootstrap",
@@ -10,7 +10,7 @@
     "windows": "powershell -ExecutionPolicy Bypass -Command \"iwr https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts/install-fyp-trainer.ps1 -OutFile $env:TEMP\\install-fyp-trainer.ps1; & $env:TEMP\\install-fyp-trainer.ps1\"",
     "unix": "curl -fsSL https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts/install-fyp-trainer.sh | bash",
     "defaultInstallDir": "~/.fyp-trainer",
-    "codexSkillDir": "~/.codex/skills/fyp-trainer"
+    "codexSkillDir": "~/.codex/skills/fyptrainer"
   },
   "commands": {
     "profile": "node ./src/cli.js profile --input=\"<user request>\" --json",

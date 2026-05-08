@@ -5,7 +5,7 @@
 After the user installs or clones the GitHub repo, tell Claude Code:
 
 ```text
-$fyp-trainer
+$fyptrainer
 ```
 
 ## Commands

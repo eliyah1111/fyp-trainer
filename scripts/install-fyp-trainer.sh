@@ -4,6 +4,7 @@ set -euo pipefail
 REPO_URL="${REPO_URL:-https://github.com/eliyah1111/fyp-trainer.git}"
 INSTALL_DIR="${INSTALL_DIR:-$HOME/.fyp-trainer}"
 CODEX_SKILLS_DIR="${CODEX_SKILLS_DIR:-$HOME/.codex/skills}"
+CODEX_SKILL_NAME="${CODEX_SKILL_NAME:-fyptrainer}"
 BRANCH="${BRANCH:-}"
 SKIP_BOOTSTRAP="${SKIP_BOOTSTRAP:-0}"
 SKIP_CODEX_SKILL="${SKIP_CODEX_SKILL:-0}"
@@ -47,6 +48,28 @@ update_managed_repo() {
   git -C "$INSTALL_DIR" checkout -B "$branch_name" "$target_ref"
 }
 
+remove_legacy_codex_skill() {
+  if [[ "$CODEX_SKILL_NAME" == "fyp-trainer" ]]; then
+    return
+  fi
+
+  local legacy_dir="$CODEX_SKILLS_DIR/fyp-trainer"
+  if [[ ! -d "$legacy_dir" ]]; then
+    return
+  fi
+
+  case "$legacy_dir" in
+    "$CODEX_SKILLS_DIR"/*)
+      rm -rf "$legacy_dir"
+      echo "Removed legacy Codex skill alias at $legacy_dir"
+      ;;
+    *)
+      echo "Refusing to remove legacy skill outside Codex skills directory: $legacy_dir" >&2
+      exit 1
+      ;;
+  esac
+}
+
 install_or_update_repo() {
   if [[ -d "$INSTALL_DIR" ]]; then
     if [[ ! -d "$INSTALL_DIR/.git" ]]; then
@@ -72,14 +95,16 @@ register_codex_skill() {
     return
   fi
 
-  local skill_dir="$CODEX_SKILLS_DIR/fyp-trainer"
+  remove_legacy_codex_skill
+
+  local skill_dir="$CODEX_SKILLS_DIR/$CODEX_SKILL_NAME"
   local agent_dir="$skill_dir/agents"
   mkdir -p "$agent_dir"
 
   cat > "$skill_dir/SKILL.md" <<EOF
 ---
-name: fyp-trainer
-description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For You Page personalization. Use when the user invokes \$fyp-trainer or asks to train, personalize, curate, or reshape their TikTok FYP with a visible browser, Node.js, Playwright, adaptive search planning, Y/N approval, and safe capped browsing sessions.
+name: $CODEX_SKILL_NAME
+description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For You Page personalization. Use when the user invokes \$fyptrainer or asks to train, personalize, curate, or reshape their TikTok FYP with a visible browser, Node.js, Playwright, adaptive search planning, Y/N approval, and safe capped browsing sessions.
 ---
 
 # FYP Trainer
@@ -87,7 +112,7 @@ description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For 
 Invoke this skill with:
 
 ~~~text
-\$fyp-trainer
+\$fyptrainer
 ~~~
 
 Runtime installed at:
@@ -161,9 +186,15 @@ npm run run
 - Summarize the newest \`sessions/session-*.json\` after a run.
 EOF
 
-  if [[ -f "$INSTALL_DIR/agents/openai.yaml" ]]; then
-    cp "$INSTALL_DIR/agents/openai.yaml" "$agent_dir/openai.yaml"
-  fi
+  cat > "$agent_dir/openai.yaml" <<EOF
+interface:
+  display_name: "FYP Trainer"
+  short_description: "Agent-run TikTok FYP training workflow"
+  default_prompt: "\$fyptrainer"
+
+policy:
+  allow_implicit_invocation: true
+EOF
 
   echo "Registered Codex skill at $skill_dir"
 }
@@ -185,10 +216,10 @@ echo
 echo "FYP Trainer installed."
 echo "Runtime: $INSTALL_DIR"
 if [[ "$SKIP_CODEX_SKILL" != "1" ]]; then
-  echo "Codex skill: $CODEX_SKILLS_DIR/fyp-trainer"
+  echo "Codex skill: $CODEX_SKILLS_DIR/$CODEX_SKILL_NAME"
 fi
 echo
 echo "Now tell your AI agent:"
-echo '$fyp-trainer'
+echo '$fyptrainer'
 echo "The agent will ask what kind of TikTok For You Page you want."
 

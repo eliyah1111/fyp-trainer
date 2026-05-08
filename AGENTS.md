@@ -16,14 +16,14 @@ macOS / Linux:
 curl -fsSL https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts/install-fyp-trainer.sh | bash
 ```
 
-The installer clones or updates the runtime at `~/.fyp-trainer`, runs bootstrap, and registers a Codex skill at `~/.codex/skills/fyp-trainer`.
+The installer clones or updates the runtime at `~/.fyp-trainer`, runs bootstrap, and registers a Codex skill at `~/.codex/skills/fyptrainer`.
 
 ## User Experience
 
 The user should say something like:
 
 ```text
-$fyp-trainer
+$fyptrainer
 ```
 
 The agent should ask what kind of TikTok For You Page the user wants, handle commands internally, and keep the user in the approval loop.

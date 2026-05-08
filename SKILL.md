@@ -1,6 +1,6 @@
 ---
-name: fyp-trainer
-description: GitHub-installable AI agent skill/runtime for user-confirmed TikTok For You Page preference training with Node.js, Playwright, a visible browser, JSON memory, Y/N confirmation, and adapters for Codex, Claude Code, Cursor Agents, OpenAI Agents, and similar automation environments. Use when the user invokes `$fyp-trainer`, or asks an AI agent to open TikTok, generate a FYP training profile from their taste description, ask for approval, search relevant terms, watch visible videos briefly, classify content by visible text/hashtags/caption, mark a small capped number of unrelated videos as Not Interested, refresh the feed at the end, or inspect session logs.
+name: fyptrainer
+description: GitHub-installable AI agent skill/runtime for user-confirmed TikTok For You Page preference training with Node.js, Playwright, a visible browser, JSON memory, Y/N confirmation, and adapters for Codex, Claude Code, Cursor Agents, OpenAI Agents, and similar automation environments. Use when the user invokes `$fyptrainer`, or asks an AI agent to open TikTok, generate a FYP training profile from their taste description, ask for approval, search relevant terms, watch visible videos briefly, classify content by visible text/hashtags/caption, mark a small capped number of unrelated videos as Not Interested, refresh the feed at the end, or inspect session logs.
 ---
 
 # FYP Trainer
@@ -8,12 +8,12 @@ description: GitHub-installable AI agent skill/runtime for user-confirmed TikTok
 Use this skill as an agent-operated runtime. The primary invocation is:
 
 ```text
-$fyp-trainer
+$fyptrainer
 ```
 
-If the user invokes only `$fyp-trainer`, ask: "What kind of TikTok For You Page do you want?"
+If the user invokes only `$fyptrainer`, ask: "What kind of TikTok For You Page do you want?"
 
-If the user invokes `$fyp-trainer` with a taste description in the same message, use that description directly.
+If the user invokes `$fyptrainer` with a taste description in the same message, use that description directly.
 
 ## Agent Workflow
 

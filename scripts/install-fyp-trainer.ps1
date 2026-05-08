@@ -2,6 +2,7 @@ param(
   [string]$RepoUrl = "https://github.com/eliyah1111/fyp-trainer.git",
   [string]$InstallDir = "$env:USERPROFILE\.fyp-trainer",
   [string]$CodexSkillsDir = "$env:USERPROFILE\.codex\skills",
+  [string]$CodexSkillName = "fyptrainer",
   [string]$Branch = "",
   [switch]$SkipBootstrap,
   [switch]$SkipCodexSkill
@@ -22,6 +23,12 @@ function Run-Native {
   if ($LASTEXITCODE -ne 0) {
     throw "Command failed: $File $($Arguments -join ' ')"
   }
+}
+
+function Write-Utf8NoBom {
+  param([string]$Path, [string]$Value)
+  $encoding = New-Object System.Text.UTF8Encoding($false)
+  [System.IO.File]::WriteAllText($Path, $Value, $encoding)
 }
 
 function Run-InRepo {
@@ -106,19 +113,42 @@ function Install-OrUpdateRepo {
   }
 }
 
+function Remove-LegacyCodexSkill {
+  if ($CodexSkillName -eq "fyp-trainer") {
+    return
+  }
+
+  $legacyDir = Join-Path $CodexSkillsDir "fyp-trainer"
+  if (-not (Test-Path -LiteralPath $legacyDir)) {
+    return
+  }
+
+  $skillsRoot = [System.IO.Path]::GetFullPath($CodexSkillsDir)
+  $legacyFull = [System.IO.Path]::GetFullPath($legacyDir)
+  $prefix = $skillsRoot.TrimEnd("\", "/") + [System.IO.Path]::DirectorySeparatorChar
+  if (-not $legacyFull.StartsWith($prefix, [System.StringComparison]::OrdinalIgnoreCase)) {
+    throw "Refusing to remove legacy skill outside Codex skills directory: $legacyFull"
+  }
+
+  Remove-Item -LiteralPath $legacyFull -Recurse -Force
+  Write-Output "Removed legacy Codex skill alias at $legacyFull"
+}
+
 function Register-CodexSkill {
   if ($SkipCodexSkill) {
     return
   }
 
-  $skillDir = Join-Path $CodexSkillsDir "fyp-trainer"
+  Remove-LegacyCodexSkill
+
+  $skillDir = Join-Path $CodexSkillsDir $CodexSkillName
   $agentDir = Join-Path $skillDir "agents"
   New-Item -ItemType Directory -Force -Path $agentDir | Out-Null
 
   $skillBody = @"
 ---
-name: fyp-trainer
-description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For You Page personalization. Use when the user invokes `$fyp-trainer` or asks to train, personalize, curate, or reshape their TikTok FYP with a visible browser, Node.js, Playwright, adaptive search planning, Y/N approval, and safe capped browsing sessions.
+name: $CodexSkillName
+description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For You Page personalization. Use when the user invokes `$fyptrainer` or asks to train, personalize, curate, or reshape their TikTok FYP with a visible browser, Node.js, Playwright, adaptive search planning, Y/N approval, and safe capped browsing sessions.
 ---
 
 # FYP Trainer
@@ -126,7 +156,7 @@ description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For 
 Invoke this skill with:
 
 ~~~text
-`$fyp-trainer
+`$fyptrainer
 ~~~
 
 Runtime installed at:
@@ -200,12 +230,18 @@ npm run run
 - Summarize the newest `sessions/session-*.json` after a run.
 "@
 
-  Set-Content -LiteralPath (Join-Path $skillDir "SKILL.md") -Value $skillBody -Encoding UTF8
+  Write-Utf8NoBom (Join-Path $skillDir "SKILL.md") $skillBody
 
-  $sourceOpenAiYaml = Join-Path $InstallDir "agents\openai.yaml"
-  if (Test-Path -LiteralPath $sourceOpenAiYaml) {
-    Copy-Item -LiteralPath $sourceOpenAiYaml -Destination (Join-Path $agentDir "openai.yaml") -Force
-  }
+  $openAiYaml = @"
+interface:
+  display_name: "FYP Trainer"
+  short_description: "Agent-run TikTok FYP training workflow"
+  default_prompt: "`$fyptrainer"
+
+policy:
+  allow_implicit_invocation: true
+"@
+  Write-Utf8NoBom (Join-Path $agentDir "openai.yaml") $openAiYaml
 
   Write-Output "Registered Codex skill at $skillDir"
 }
@@ -227,10 +263,10 @@ Write-Output ""
 Write-Output "FYP Trainer installed."
 Write-Output "Runtime: $InstallDir"
 if (-not $SkipCodexSkill) {
-  Write-Output "Codex skill: $(Join-Path $CodexSkillsDir "fyp-trainer")"
+  Write-Output "Codex skill: $(Join-Path $CodexSkillsDir $CodexSkillName)"
 }
 Write-Output ""
 Write-Output "Now tell your AI agent:"
-Write-Output '$fyp-trainer'
+Write-Output '$fyptrainer'
 Write-Output "The agent will ask what kind of TikTok For You Page you want."
 

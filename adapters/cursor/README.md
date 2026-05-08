@@ -5,7 +5,7 @@
 After the user installs or clones the GitHub repo, reference it in Cursor chat:
 
 ```text
-$fyp-trainer
+$fyptrainer
 ```
 
 ## Commands

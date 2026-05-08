@@ -23,12 +23,12 @@ curl -fsSL https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts
 Then they tell their AI agent:
 
 ```text
-$fyp-trainer
+$fyptrainer
 ```
 
 The agent reads `SKILL.md` / `AGENTS.md`, asks what kind of FYP the user wants, runs bootstrap if needed, generates the search profile, asks `Approve this search plan? [Y/N]`, then opens TikTok visibly and runs the capped session.
 
-The installer clones or updates the runtime at `~/.fyp-trainer`, runs `npm run bootstrap`, and registers a small Codex skill at `~/.codex/skills/fyp-trainer` that points back to the installed runtime.
+The installer clones or updates the runtime at `~/.fyp-trainer`, runs `npm run bootstrap`, and registers a small Codex skill at `~/.codex/skills/fyptrainer` that points back to the installed runtime.
 
 To install from a fork or another repo:
 

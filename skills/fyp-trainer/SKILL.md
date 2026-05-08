@@ -1,6 +1,6 @@
 ---
-name: fyp-trainer
-description: Build and run transparent, user-confirmed TikTok For You Page training sessions with Node.js, Playwright, JSON memory, and adapter guidance for Claude Code, Codex, Cursor Agents, OpenAI Agents, and similar AI automation environments. Use when the user invokes `$fyp-trainer`, or wants an AI agent to generate a TikTok aesthetic/profile, confirm the plan, open TikTok, wait for manual login, run a short bounded browsing session, or inspect prior FYP training state.
+name: fyptrainer
+description: Build and run transparent, user-confirmed TikTok For You Page training sessions with Node.js, Playwright, JSON memory, and adapter guidance for Claude Code, Codex, Cursor Agents, OpenAI Agents, and similar AI automation environments. Use when the user invokes `$fyptrainer`, or wants an AI agent to generate a TikTok aesthetic/profile, confirm the plan, open TikTok, wait for manual login, run a short bounded browsing session, or inspect prior FYP training state.
 ---
 
 # FYP Trainer
@@ -10,12 +10,12 @@ Use this skill to shape a TikTok For You Page toward a user-confirmed taste prof
 Invoke this skill with:
 
 ```text
-$fyp-trainer
+$fyptrainer
 ```
 
-If the user invokes only `$fyp-trainer`, ask: "What kind of TikTok For You Page do you want?"
+If the user invokes only `$fyptrainer`, ask: "What kind of TikTok For You Page do you want?"
 
-If the user invokes `$fyp-trainer` with a taste description in the same message, use that description directly.
+If the user invokes `$fyptrainer` with a taste description in the same message, use that description directly.
 
 ## Runtime
 
