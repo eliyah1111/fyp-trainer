@@ -86,9 +86,9 @@ description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For 
 
 Runtime installed at:
 
-\`\`\`text
+~~~text
 $INSTALL_DIR
-\`\`\`
+~~~
 
 Use this skill as an agent-operated runtime. Do not ask the user to manually run commands unless the agent cannot run shell commands.
 
@@ -96,46 +96,46 @@ Use this skill as an agent-operated runtime. Do not ask the user to manually run
 
 1. From the runtime root, run:
 
-\`\`\`bash
+~~~bash
 cd "$INSTALL_DIR"
 npm run bootstrap
-\`\`\`
+~~~
 
 2. If the user did not describe the desired FYP yet, ask:
 
-\`\`\`text
+~~~text
 What kind of TikTok For You Page do you want?
-\`\`\`
+~~~
 
 3. Generate the profile:
 
-\`\`\`bash
+~~~bash
 node ./src/cli.js profile --input="<user request>" --json
-\`\`\`
+~~~
 
 4. Preview the plan:
 
-\`\`\`bash
+~~~bash
 node ./src/cli.js plan --searches=5
-\`\`\`
+~~~
 
 5. Show the profile and ask exactly:
 
-\`\`\`text
+~~~text
 Approve this search plan? [Y/N]
-\`\`\`
+~~~
 
 6. Only after \`Y\`, run:
 
-\`\`\`bash
+~~~bash
 node ./src/cli.js train --confirmed --duration=60
-\`\`\`
+~~~
 
 For the full interactive flow, run:
 
-\`\`\`bash
+~~~bash
 npm run run
-\`\`\`
+~~~
 
 ## Rules
 
