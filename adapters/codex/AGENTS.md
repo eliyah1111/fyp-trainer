@@ -1,6 +1,7 @@
 # FYP Trainer Agent Notes
 
 - Read `skills/fyp-trainer/SKILL.md` before running the workflow.
+- Treat `$fyp-trainer` as the normal user-facing invocation.
 - Ask the user for the desired FYP profile after TikTok login is available.
 - Show the generated profile summary and wait for confirmation.
 - Use `npm run diagnose -- --isolated --query="<query>"` to validate browser flow without touching the user's regular profile.

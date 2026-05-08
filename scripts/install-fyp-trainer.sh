@@ -79,10 +79,16 @@ register_codex_skill() {
   cat > "$skill_dir/SKILL.md" <<EOF
 ---
 name: fyp-trainer
-description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For You Page personalization. Use when the user asks to train, personalize, curate, or reshape their TikTok FYP with a visible browser, Node.js, Playwright, adaptive search planning, Y/N approval, and safe capped browsing sessions.
+description: GitHub-installed FYP Trainer runtime for user-confirmed TikTok For You Page personalization. Use when the user invokes \$fyp-trainer or asks to train, personalize, curate, or reshape their TikTok FYP with a visible browser, Node.js, Playwright, adaptive search planning, Y/N approval, and safe capped browsing sessions.
 ---
 
 # FYP Trainer
+
+Invoke this skill with:
+
+~~~text
+\$fyp-trainer
+~~~
 
 Runtime installed at:
 
@@ -91,6 +97,14 @@ $INSTALL_DIR
 ~~~
 
 Use this skill as an agent-operated runtime. Do not ask the user to manually run commands unless the agent cannot run shell commands.
+
+If the user invokes only the skill name with no taste description, ask:
+
+~~~text
+What kind of TikTok For You Page do you want?
+~~~
+
+If the user invokes the skill with a taste description in the same message, use that description directly.
 
 ## Workflow
 
@@ -175,6 +189,6 @@ if [[ "$SKIP_CODEX_SKILL" != "1" ]]; then
 fi
 echo
 echo "Now tell your AI agent:"
-echo "Use FYP Trainer."
+echo '$fyp-trainer'
 echo "The agent will ask what kind of TikTok For You Page you want."
 

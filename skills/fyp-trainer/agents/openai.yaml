@@ -1,7 +1,7 @@
 interface:
   display_name: "FYP Trainer"
   short_description: "Train a TikTok FYP with confirmed sessions"
-  default_prompt: "Use $fyp-trainer to generate a confirmed TikTok FYP training profile and run a short dry-run diagnostic first."
+  default_prompt: "$fyp-trainer"
 
 policy:
   allow_implicit_invocation: true

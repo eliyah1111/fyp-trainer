@@ -23,7 +23,7 @@ curl -fsSL https://raw.githubusercontent.com/eliyah1111/fyp-trainer/main/scripts
 Then they tell their AI agent:
 
 ```text
-Use FYP Trainer.
+$fyp-trainer
 ```
 
 The agent reads `SKILL.md` / `AGENTS.md`, asks what kind of FYP the user wants, runs bootstrap if needed, generates the search profile, asks `Approve this search plan? [Y/N]`, then opens TikTok visibly and runs the capped session.

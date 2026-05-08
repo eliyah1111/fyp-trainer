@@ -23,7 +23,7 @@ The installer clones or updates the runtime at `~/.fyp-trainer`, runs bootstrap,
 The user should say something like:
 
 ```text
-Use FYP Trainer.
+$fyp-trainer
 ```
 
 The agent should ask what kind of TikTok For You Page the user wants, handle commands internally, and keep the user in the approval loop.

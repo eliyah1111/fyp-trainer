@@ -5,7 +5,7 @@
 After the user installs or clones the GitHub repo, tell Claude Code:
 
 ```text
-Use FYP Trainer from this repository. Generate the profile first, ask `Approve this search plan? [Y/N]`, and only train after I answer Y.
+$fyp-trainer
 ```
 
 ## Commands

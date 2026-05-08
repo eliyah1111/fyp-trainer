@@ -1,6 +1,7 @@
 {
   "name": "fyp-trainer",
   "version": "0.1.0",
+  "invocation": "$fyp-trainer",
   "entrypoint": "SKILL.md",
   "runtime": "node-playwright",
   "bootstrap": "npm run bootstrap",
