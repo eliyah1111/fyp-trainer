@@ -77,7 +77,7 @@ The runtime is intentionally bounded:
 
 - 60 seconds by default.
 - Search bank: 100+ local candidate searches.
-- Live TikTok execution: adaptive capped search burst, short watches, tiny capped preference actions.
+- Live TikTok execution: fast adaptive capped search burst, up to 24 high-value searches by default with a hard cap of 30, short watches, tiny capped preference actions.
 - No mass following, commenting, messaging, posting, uploading, scraping, or hundreds of robotic live actions per minute.
 
 Use `references/agent-contract.md` and `references/safety-boundaries.md` for integration details.

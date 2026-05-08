@@ -229,7 +229,7 @@ npm run run
 - Open TikTok visibly in the user's default supported Chromium browser app.
 - Wait for manual login when needed.
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
-- Keep live sessions capped and realistic; do not perform hundreds of live searches, views, likes, follows, or Not Interested actions per minute.
+- Keep live sessions fast but capped: up to 24 live searches by default, hard cap 30, and no hundreds of robotic searches, views, likes, follows, or Not Interested actions per minute.
 - Use `memory/search-cache.json` as private local discovery memory.
 - Summarize the newest `sessions/session-*.json` after a run.
 "@
@@ -301,7 +301,7 @@ Rules:
 - Open TikTok visibly in the user's default supported Chromium browser app.
 - Wait for manual login when needed.
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
-- Keep live sessions capped and realistic.
+- Keep live sessions fast but capped: up to 24 live searches by default, hard cap 30.
 - Summarize the newest `sessions/session-*.json` after a run.
 "@
 
@@ -347,7 +347,7 @@ Rules:
 - Open TikTok visibly in the user's default supported Chromium browser app.
 - Wait for manual login when needed.
 - Never collect credentials or bypass CAPTCHA, age gates, safety prompts, or login protections.
-- Keep live sessions capped and realistic.
+- Keep live sessions fast but capped: up to 24 live searches by default, hard cap 30.
 '''
 "@
 

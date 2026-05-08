@@ -96,7 +96,7 @@ Use dry-run mode while testing:
 npm run train -- --dry-run --duration=30
 ```
 
-Default sessions are optimized to finish in 60 seconds or less. Use `--careful` only when you want the older slower pacing.
+Default sessions are optimized to feel fast and finish in 60 seconds or less: the live planner now targets up to 24 high-value searches per session, with a hard safety cap of 30 even if a larger number is requested. Use `--careful` only when you want the older slower pacing.
 The profile step generates a local search bank of 100+ candidate searches immediately, then asks for `Y/N` approval before any live training starts.
 
 Session planning is cache-aware:

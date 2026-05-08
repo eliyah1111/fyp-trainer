@@ -8,6 +8,7 @@ import { buildSessionPlan } from "./core/session-planner.js";
 import { runTrainingSession } from "./core/session-runner.js";
 import { runInteractive } from "./workflows/interactive.js";
 import { runTikTokDiagnostic } from "./workflows/diagnose-tiktok.js";
+import { DEFAULTS } from "./config/defaults.js";
 
 function parseArgs(argv) {
   const args = { _: [] };
@@ -83,7 +84,7 @@ async function commandPlan(args) {
   const searchCache = await memory.getSearchCache();
   const plan = buildSessionPlan(profile, {
     durationSeconds: Number(args.duration || args.seconds || 60),
-    maxSearches: Number(args.searches || 14),
+    maxSearches: args.searches ? Number(args.searches) : undefined,
     searchCache
   });
   console.log(JSON.stringify(plan, null, 2));
@@ -100,9 +101,9 @@ async function commandTrain(args) {
     allowFollow: booleanFlag(args, "allow-follow", false),
     maxFollows: Number(args["max-follows"] || 0),
     maxLikes: Number(args["max-likes"] || 2),
-    maxNotInterested: Number(args["max-not-interested"] || 3),
+    maxNotInterested: Number(args["max-not-interested"] || DEFAULTS.session.maxNotInterested),
     durationSeconds: Number(args.duration || args.seconds || 60),
-    maxSearches: Number(args.searches || 14),
+    maxSearches: args.searches ? Number(args.searches) : undefined,
     careful: booleanFlag(args, "careful", false),
     keepBrowserOpen: booleanFlag(args, "keep-open", false),
     waitForLogin: input.isTTY
@@ -137,7 +138,7 @@ async function main() {
       ...browserOptions(args),
       headless: booleanFlag(args, "headless", false),
       durationSeconds: Number(args.duration || args.seconds || 60),
-      maxSearches: Number(args.searches || 14),
+      maxSearches: args.searches ? Number(args.searches) : undefined,
       careful: booleanFlag(args, "careful", false),
       keepBrowserOpen: booleanFlag(args, "keep-open", false)
     });

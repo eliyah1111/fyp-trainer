@@ -48,6 +48,8 @@ The agent should ask what kind of TikTok For You Page the user wants, handle com
 6. Read the newest `sessions/session-*.json`.
 7. Report what happened: searches, videos opened, watches, Not Interested count, likes, and final refresh.
 
+Default live sessions are fast but bounded: up to 24 high-value searches in a one-minute run, with a hard cap of 30 if an agent requests more.
+
 ## Do Not
 
 - Ask the user to manually run terminal commands unless the agent cannot run shell commands.

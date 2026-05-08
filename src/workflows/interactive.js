@@ -4,6 +4,7 @@ import { analyzeFypRequest, formatProfileSummary, mergeProfileChange } from "../
 import { launchTikTokBrowser, openTikTok } from "../core/browser.js";
 import { detectLoginState, summarizeLoginState } from "../core/tiktok-detector.js";
 import { runTrainingSession } from "../core/session-runner.js";
+import { DEFAULTS } from "../config/defaults.js";
 
 function createPrompt() {
   return readline.createInterface({ input, output });
@@ -24,8 +25,12 @@ async function confirmProfileLoop(rl, firstRequest) {
   while (true) {
     console.log("\nTraining profile\n");
     console.log(formatProfileSummary(profile));
-    console.log("\nPlanned account signals: likes capped at 2, Not Interested capped at 3, follows disabled by default.");
-    console.log("Session engine: adaptive cache-aware discovery, up to 14 searches in a 60-second session.");
+    console.log(
+      `\nPlanned account signals: likes capped at ${DEFAULTS.session.maxLikes}, Not Interested capped at ${DEFAULTS.session.maxNotInterested}, follows disabled by default.`
+    );
+    console.log(
+      `Session engine: fast adaptive discovery, up to ${DEFAULTS.session.maxSearches} live searches in a 60-second session.`
+    );
     const answer = (await rl.question("\nApprove this search plan? [Y/N] ")).trim();
     if (/^(yes|y)$/i.test(answer)) return profile;
     if (!/^(no|n)$/i.test(answer)) {

@@ -33,6 +33,8 @@
   "limits": {
     "defaultDurationSeconds": 60,
     "maxDurationSeconds": 60,
+    "defaultLiveSearches": 24,
+    "hardLiveSearchCap": 30,
     "massActionsPerMinute": false
   }
 }

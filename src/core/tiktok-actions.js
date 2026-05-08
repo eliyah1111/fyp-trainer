@@ -89,10 +89,10 @@ export async function searchTikTok(page, query, options = {}) {
       await input.fill("");
       await input.type(query, { delay: humanizer.typingDelay() });
       await input.press("Enter");
-      await page.waitForLoadState("domcontentloaded", { timeout: 20_000 }).catch(() => {});
+      await page.waitForLoadState("domcontentloaded", { timeout: 8_000 }).catch(() => {});
       await page.waitForFunction(
         () => location.href.includes("/search") || document.querySelector('a[href*="/video/"]'),
-        { timeout: 8_000 }
+        { timeout: 4_000 }
       ).catch(() => {});
       await humanizer.pause(
         humanizer.timing.afterSearchPauseMinMs,
@@ -104,15 +104,14 @@ export async function searchTikTok(page, query, options = {}) {
 
   const searchUrl = `https://www.tiktok.com/search/video?q=${encodeURIComponent(query)}`;
   try {
-    await page.goto(searchUrl, { waitUntil: "commit", timeout: 25_000 });
+    await page.goto(searchUrl, { waitUntil: "commit", timeout: 10_000 });
   } catch (error) {
     if (!page.url().includes("/search")) throw error;
   }
-  await page.waitForLoadState("domcontentloaded", { timeout: 20_000 }).catch(() => {});
-  await page.waitForLoadState("load", { timeout: 20_000 }).catch(() => {});
+  await page.waitForLoadState("domcontentloaded", { timeout: 8_000 }).catch(() => {});
   await page.waitForFunction(
     () => (document.body?.innerText || "").length > 20 || document.querySelector('a[href*="/video/"]'),
-    { timeout: 8_000 }
+    { timeout: 4_000 }
   ).catch(() => {});
   await humanizer.pause(
     humanizer.timing.afterSearchPauseMinMs,
@@ -141,12 +140,11 @@ export async function openRandomVideoFromPage(page, options = {}) {
   const target = sample(links.slice(0, Math.min(links.length, 8)));
   await humanizer.moveMouse(page);
   try {
-    await page.goto(target, { waitUntil: "commit", timeout: 12_000 });
+    await page.goto(target, { waitUntil: "commit", timeout: 8_000 });
   } catch (error) {
     if (!page.url().includes("/video/")) throw error;
   }
-  await page.waitForLoadState("domcontentloaded", { timeout: 6_000 }).catch(() => {});
-  await page.waitForLoadState("load", { timeout: 6_000 }).catch(() => {});
+  await page.waitForLoadState("domcontentloaded", { timeout: 4_000 }).catch(() => {});
   await humanizer.pause(
     humanizer.timing.afterOpenVideoPauseMinMs,
     humanizer.timing.afterOpenVideoPauseMaxMs
@@ -157,14 +155,14 @@ export async function openRandomVideoFromPage(page, options = {}) {
 export async function openFeedFallback(page, options = {}) {
   const humanizer = options.humanizer || new Humanizer();
   try {
-    await page.goto("https://www.tiktok.com/foryou", { waitUntil: "commit", timeout: 12_000 });
+    await page.goto("https://www.tiktok.com/foryou", { waitUntil: "commit", timeout: 8_000 });
   } catch (error) {
     if (!page.url().startsWith("https://www.tiktok.com")) throw error;
   }
-  await page.waitForLoadState("domcontentloaded", { timeout: 6_000 }).catch(() => {});
+  await page.waitForLoadState("domcontentloaded", { timeout: 4_000 }).catch(() => {});
   await page
     .waitForFunction(() => document.querySelector("video") || (document.body?.innerText || "").length > 20, {
-      timeout: 6_000
+      timeout: 4_000
     })
     .catch(() => {});
   await humanizer.pause(
@@ -242,7 +240,7 @@ export async function tryNotInterestedCurrentVideo(page, options = {}) {
   await page.mouse.click(Math.floor(viewport.width * 0.5), Math.floor(viewport.height * 0.48), {
     button: "right"
   });
-  await page.waitForTimeout(700);
+  await page.waitForTimeout(250);
   const candidate = page.getByText("Not interested", { exact: false }).first();
   if (await candidate.isVisible().catch(() => false)) {
     await candidate.click({ timeout: 5_000 }).catch(() => {});
@@ -254,11 +252,11 @@ export async function tryNotInterestedCurrentVideo(page, options = {}) {
 
 export async function refreshTikTokFeed(page, options = {}) {
   const humanizer = options.humanizer || new Humanizer();
-  await page.reload({ waitUntil: "commit", timeout: 20_000 }).catch(async () => {
-    await page.goto("https://www.tiktok.com/foryou", { waitUntil: "commit", timeout: 20_000 });
+  await page.reload({ waitUntil: "commit", timeout: 10_000 }).catch(async () => {
+    await page.goto("https://www.tiktok.com/foryou", { waitUntil: "commit", timeout: 10_000 });
   });
-  await page.waitForLoadState("domcontentloaded", { timeout: 8_000 }).catch(() => {});
-  await humanizer.pause(600, 1_400);
+  await page.waitForLoadState("domcontentloaded", { timeout: 5_000 }).catch(() => {});
+  await humanizer.pause(250, 700);
   return {
     ok: true,
     url: page.url()

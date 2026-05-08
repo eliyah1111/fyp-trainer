@@ -18,3 +18,11 @@ test("caps session duration to the configured maximum", () => {
   assert.equal(plan.durationMs, 60_000);
   assert.equal(plan.interactionCaps.follows, 0);
 });
+
+test("caps live searches even when a larger number is requested", () => {
+  const profile = analyzeFypRequest("ai tools openai claude code codex gemini creative coding");
+  const plan = buildSessionPlan(profile, { maxSearches: 200 });
+
+  assert.equal(plan.orchestration.hardLiveSearchLimit, 30);
+  assert.ok(plan.searchQueue.length <= 30);
+});

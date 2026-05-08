@@ -27,17 +27,17 @@ export class Humanizer {
   }
 
   async moveMouse(page) {
-    if (!this.enabled || !chance(0.42)) return;
+    if (!this.enabled || !chance(0.24)) return;
     const viewport = page.viewportSize() || { width: 1280, height: 900 };
     await page.mouse.move(
       randomInt(Math.floor(viewport.width * 0.25), Math.floor(viewport.width * 0.75)),
       randomInt(Math.floor(viewport.height * 0.18), Math.floor(viewport.height * 0.82)),
-      { steps: randomInt(5, 14) }
+      { steps: randomInt(3, 8) }
     );
   }
 
   async smallScroll(page) {
-    if (!this.enabled || !chance(0.35)) return;
+    if (!this.enabled || !chance(0.18)) return;
     const viewport = page.viewportSize() || { width: 1280, height: 900 };
     await page.mouse.wheel(
       randomInt(-20, 24),

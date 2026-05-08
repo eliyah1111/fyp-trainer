@@ -1,6 +1,7 @@
 import crypto from "node:crypto";
 import { cleanToken, slugify, titleCase, tokenize, truncate } from "../utils/text.js";
 import { unique } from "../utils/random.js";
+import { DEFAULTS } from "../config/defaults.js";
 
 const CATALOG = [
   {
@@ -358,9 +359,9 @@ export function analyzeFypRequest(input, options = {}) {
     ],
     interactionPolicy: {
       maxDurationMinutes: 1,
-      maxLikesPerSession: 2,
-      maxFollowsPerSession: 0,
-      maxNotInterestedPerSession: 3,
+      maxLikesPerSession: DEFAULTS.session.maxLikes,
+      maxFollowsPerSession: DEFAULTS.session.maxFollows,
+      maxNotInterestedPerSession: DEFAULTS.session.maxNotInterested,
       followRequiresExplicitFlag: true,
       dryRunSupported: true
     }
