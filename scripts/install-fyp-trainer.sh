@@ -17,6 +17,36 @@ require_command() {
   fi
 }
 
+save_local_tracked_edits() {
+  local dirty
+  dirty="$(git -C "$INSTALL_DIR" status --porcelain --untracked-files=no)"
+  if [[ -n "$dirty" ]]; then
+    echo "Local tracked edits found in managed install; saving them to a git stash before updating."
+    git -C "$INSTALL_DIR" stash push -m "fyp-trainer installer backup before update"
+  fi
+}
+
+update_managed_repo() {
+  local branch_name="$BRANCH"
+  if [[ -z "$branch_name" ]]; then
+    branch_name="$(git -C "$INSTALL_DIR" rev-parse --abbrev-ref HEAD || true)"
+    if [[ -z "$branch_name" || "$branch_name" == "HEAD" ]]; then
+      branch_name="main"
+    fi
+  fi
+
+  local target_ref="origin/$branch_name"
+  git -C "$INSTALL_DIR" remote set-url origin "$REPO_URL"
+  git -C "$INSTALL_DIR" fetch origin
+  if ! git -C "$INSTALL_DIR" rev-parse --verify "$target_ref" >/dev/null 2>&1; then
+    echo "Remote branch not found: $target_ref" >&2
+    exit 1
+  fi
+
+  save_local_tracked_edits
+  git -C "$INSTALL_DIR" checkout -B "$branch_name" "$target_ref"
+}
+
 install_or_update_repo() {
   if [[ -d "$INSTALL_DIR" ]]; then
     if [[ ! -d "$INSTALL_DIR/.git" ]]; then
@@ -25,14 +55,7 @@ install_or_update_repo() {
     fi
 
     echo "Updating FYP Trainer at $INSTALL_DIR"
-    git -C "$INSTALL_DIR" remote set-url origin "$REPO_URL"
-    git -C "$INSTALL_DIR" fetch origin
-    if [[ -n "$BRANCH" ]]; then
-      git -C "$INSTALL_DIR" checkout "$BRANCH"
-      git -C "$INSTALL_DIR" pull --ff-only origin "$BRANCH"
-    else
-      git -C "$INSTALL_DIR" pull --ff-only
-    fi
+    update_managed_repo
     return
   fi
 

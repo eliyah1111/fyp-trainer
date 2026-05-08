@@ -39,6 +39,54 @@ function Run-InRepo {
   }
 }
 
+function Git-Text {
+  param([string[]]$Arguments)
+  $output = & git @Arguments
+  if ($LASTEXITCODE -ne 0) {
+    throw "Command failed: git $($Arguments -join ' ')"
+  }
+  return ($output -join "`n").Trim()
+}
+
+function Save-LocalTrackedEdits {
+  $dirty = & git -C $InstallDir status --porcelain --untracked-files=no
+  if ($dirty) {
+    Write-Output "Local tracked edits found in managed install; saving them to a git stash before updating."
+    Run-Native "git" @("-C", $InstallDir, "stash", "push", "-m", "fyp-trainer installer backup before update")
+  }
+}
+
+function Update-ManagedRepo {
+  $branchName = $Branch.Trim()
+  if (-not $branchName) {
+    $branchName = Git-Text @("-C", $InstallDir, "rev-parse", "--abbrev-ref", "HEAD")
+    if (-not $branchName -or $branchName -eq "HEAD") {
+      $branchName = "main"
+    }
+  }
+
+  $targetRef = "origin/$branchName"
+  Run-Native "git" @("-C", $InstallDir, "remote", "set-url", "origin", $RepoUrl)
+  Run-Native "git" @("-C", $InstallDir, "fetch", "origin")
+
+  & git -C $InstallDir rev-parse --verify $targetRef *> $null
+  if ($LASTEXITCODE -ne 0) {
+    throw "Remote branch not found: $targetRef"
+  }
+
+  Save-LocalTrackedEdits
+  Run-Native "git" @("-C", $InstallDir, "checkout", "-B", $branchName, $targetRef)
+
+  & git -C $InstallDir merge-base --is-ancestor "HEAD" $targetRef
+  if ($LASTEXITCODE -eq 0) {
+    Run-Native "git" @("-C", $InstallDir, "merge", "--ff-only", $targetRef)
+    return
+  }
+
+  Write-Output "Remote history changed; resetting managed install to $targetRef."
+  Run-Native "git" @("-C", $InstallDir, "reset", "--hard", $targetRef)
+}
+
 function Install-OrUpdateRepo {
   if (Test-Path -LiteralPath $InstallDir) {
     if (-not (Test-Path -LiteralPath (Join-Path $InstallDir ".git"))) {
@@ -46,14 +94,7 @@ function Install-OrUpdateRepo {
     }
 
     Write-Output "Updating FYP Trainer at $InstallDir"
-    Run-Native "git" @("-C", $InstallDir, "remote", "set-url", "origin", $RepoUrl)
-    Run-Native "git" @("-C", $InstallDir, "fetch", "origin")
-    if ($Branch.Trim()) {
-      Run-Native "git" @("-C", $InstallDir, "checkout", $Branch)
-      Run-Native "git" @("-C", $InstallDir, "pull", "--ff-only", "origin", $Branch)
-    } else {
-      Run-Native "git" @("-C", $InstallDir, "pull", "--ff-only")
-    }
+    Update-ManagedRepo
     return
   }
 
